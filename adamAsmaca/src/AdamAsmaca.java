@@ -180,7 +180,7 @@ public class AdamAsmaca extends javax.swing.JFrame {
                 gizliKelime = gizliKelime + harf;
             }
             lblShowText.setText(gizliKelime);
-            //Eğer Açılacak Harf Kalmadıysa if Bloğunun İçine girer ve panel açarak kullanıcıya Kazandığının mesajını vererek Ekrana Mutlu Ördek Getirir.
+            //Eğer Açılacak Harf Kalmadıysa if Bloğunun İçine girer ve panel açarak kullanıcıya Kazandığının mesajını vererek Ekrana Mutlu Ördek Getirir(Oyun Yeniden Başlar).
             if (sehirBittiMi(gizlenenHarfler)) {
                 ImageIcon icon = new ImageIcon("C:\\javademos\\adamAsmaca\\src\\images\\duck.png");
                 JLabel label = new JLabel(icon);
@@ -192,7 +192,7 @@ public class AdamAsmaca extends javax.swing.JFrame {
                 oyunuYenidenBaslat();
                 return;
             }
-            //Eğer Girilen Harf Şehirin içerisinde yoksa Adamı Asmaya Başlar ve count değerini 1 arttırır, kalan hak sayısını günceller(Oyun Yeniden Başlar)
+            //Eğer Girilen Harf Şehirin içerisinde yoksa Adamı Asmaya Başlar ve count değerini 1 arttırır, kalan hak sayısını günceller
             if (yanlisTahminYaptiMi(tahminHarfi)) {
                 ImageIcon img = new ImageIcon("C:\\javademos\\adamAsmaca\\src\\images\\" + count + ".jpg");
                 lblShowStatus.setIcon(img);
