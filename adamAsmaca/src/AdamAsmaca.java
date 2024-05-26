@@ -1,6 +1,5 @@
-
 import javax.swing.*;
-
+import java.util.Arrays;
 
 public class AdamAsmaca extends javax.swing.JFrame {
     int count = 0;
@@ -25,27 +24,23 @@ public class AdamAsmaca extends javax.swing.JFrame {
     //Dizi içerisnden Şehir seçer.
     public static String sehirSec(String[] dizi) {
         int rnd = (int) (Math.random() * dizi.length);
-        String secilmis = dizi[rnd];
-        return secilmis;
+        return dizi[rnd];
     }
 
     //Secilen Şehri '_' ile gizler
     public static char[] sehirGiz(int uzunluk) {
         char[] yenidizi = new char[uzunluk];
-        for (int i = 0; i < uzunluk; i++) {
-            yenidizi[i] = '_';
-        }
+        Arrays.fill(yenidizi, '_');
         return yenidizi;
     }
 
     //Eğer klavyeden girilen değer seçilen şehirin içerisinde varsa o indeks'deki elemanları açar
-    public static char[] sehirAc(char[] yenidizi, char secKar, String secilmis) {
+    public static void sehirAc(char[] yenidizi, char secKar, String secilmis) {
         for (int i = 0; i < secilmis.length(); i++) {
             if (secilmis.charAt(i) == secKar) {
                 yenidizi[i] = secKar;
             }
         }
-        return yenidizi;
     }
 
     //Gizlenen Harf Kalıp Kalmadığını Kontrol Eder.
@@ -61,8 +56,9 @@ public class AdamAsmaca extends javax.swing.JFrame {
     //GUI Ayarlan Komutlar
     private void initComponents() {
 
-        btnNewGame = new javax.swing.JButton();
-        btnTahmin = new javax.swing.JButton();
+        //Buton Tanımlamaları
+        JButton btnNewGame = new JButton();
+        JButton btnTahmin = new JButton();
         textInput = new javax.swing.JTextField();
         lblShowStatus = new javax.swing.JLabel();
         lblShowText = new javax.swing.JLabel();
@@ -74,19 +70,11 @@ public class AdamAsmaca extends javax.swing.JFrame {
         setTitle("Adam Asmaca Oyunu");
 
         btnTahmin.setText("Tahmin Et");
-        btnTahmin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTahminActionPerformed(evt);
-            }
-        });
+        btnTahmin.addActionListener(evt -> btnTahminActionPerformed());
 
 
         btnNewGame.setText("Yeniden Başla");
-        btnNewGame.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNewGameActionPerformed(evt);
-            }
-        });
+        btnNewGame.addActionListener(evt -> btnNewGameActionPerformed());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -143,7 +131,6 @@ public class AdamAsmaca extends javax.swing.JFrame {
                                         .addComponent(btnTahmin)
                                         .addComponent(textInput, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
-
         pack();
     }
 
@@ -152,9 +139,9 @@ public class AdamAsmaca extends javax.swing.JFrame {
         secilenKelime = sehirSec(dizi);
         gizlenenHarfler = sehirGiz(secilenKelime.length());
         count = 0;
-        String gizliKelime = "";
+        StringBuilder gizliKelime = new StringBuilder();
         for (char harf : gizlenenHarfler) {
-            gizliKelime = gizliKelime + harf;
+            gizliKelime.append(harf);
         }
         lblShowText.setText(gizliKelime.toString());
         lblShowStatus.setIcon(null);
@@ -163,23 +150,23 @@ public class AdamAsmaca extends javax.swing.JFrame {
     }
 
     //Yeniden Başlat Tuşuna Tıklanırsa Oyunu Yeniden Başlatır
-    private void btnNewGameActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnNewGameActionPerformed() {
         oyunuYenidenBaslat();
     }
 
-    private void btnTahminActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnTahminActionPerformed() {
         //Kullanıcıdan Harf Alır Ve Bunu Büyük Harfe Çevirir
         String text = textInput.getText().toUpperCase();
         //Alınan Girdinin Uzunluğunu Kontrol Eder.
         if (text.length() == 1) {
             //Eğer Uzunlugu 1 İse Girdi Olarak Alır Ve Harf Eğer Seçilen Şehirin içinde varsa ilgili bölümleri açar ve ekranda yazar
             char tahminHarfi = text.charAt(0);
-            gizlenenHarfler = sehirAc(gizlenenHarfler, tahminHarfi, secilenKelime);
-            String gizliKelime = "";
+            sehirAc(gizlenenHarfler, tahminHarfi, secilenKelime);
+            StringBuilder gizliKelime = new StringBuilder();
             for (char harf : gizlenenHarfler) {
-                gizliKelime = gizliKelime + harf;
+                gizliKelime.append(harf);
             }
-            lblShowText.setText(gizliKelime);
+            lblShowText.setText(gizliKelime.toString());
             //Eğer Açılacak Harf Kalmadıysa if Bloğunun İçine girer ve panel açarak kullanıcıya Kazandığının mesajını vererek Ekrana Mutlu Ördek Getirir(Oyun Yeniden Başlar).
             if (sehirBittiMi(gizlenenHarfler)) {
                 ImageIcon icon = new ImageIcon("C:\\javademos\\adamAsmaca\\src\\images\\duck.png");
@@ -221,7 +208,7 @@ public class AdamAsmaca extends javax.swing.JFrame {
     //Kullanıcın Yanlış Tahmin Yapıp Yapmadığını Kontrol Eder.
     private boolean yanlisTahminYaptiMi(char tahminHarfi) {
         boolean yanlisTahmin = true;
-        gizlenenHarfler = sehirAc(gizlenenHarfler, tahminHarfi, secilenKelime);
+        sehirAc(gizlenenHarfler, tahminHarfi, secilenKelime);
 
         for (char harf : gizlenenHarfler) {
             if (harf == tahminHarfi) {
@@ -242,26 +229,18 @@ public class AdamAsmaca extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AdamAsmaca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AdamAsmaca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AdamAsmaca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                 UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(AdamAsmaca.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AdamAsmaca frame = new AdamAsmaca();
-                frame.getLblShowText();
-                frame.setVisible(true);
-                frame.getLblShowInf();
-                frame.getLblKalanSayac();
-                frame.getLblKoruganImg();
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            AdamAsmaca frame = new AdamAsmaca();
+            frame.getLblShowText();
+            frame.setVisible(true);
+            frame.getLblShowInf();
+            frame.getLblKalanSayac();
+            frame.getLblKoruganImg();
         });
     }
 
@@ -281,15 +260,14 @@ public class AdamAsmaca extends javax.swing.JFrame {
     }
 
     //Seçilen Şehri Alır,Gizlenen Ve Açılan Harfleri Bir Araya Getirerek Ekrana Verir
-    public JLabel getLblShowText() {
+    public void getLblShowText() {
         secilenKelime = sehirSec(dizi);
         gizlenenHarfler = sehirGiz(secilenKelime.length());
-        String gizliKelime = "";
+        StringBuilder gizliKelime = new StringBuilder();
         for (char harf : gizlenenHarfler) {
-            gizliKelime = gizliKelime + harf;
+            gizliKelime.append(harf);
         }
         lblShowText.setText(gizliKelime.toString());
-        return lblShowText;
     }
 
     //Ekrandaki Büyük Ördeği Gösterir :)
@@ -298,16 +276,10 @@ public class AdamAsmaca extends javax.swing.JFrame {
         lblKoruganImg.setIcon(icon);
     }
 
-
-    //Buton Tanımlamaları
-    private javax.swing.JButton btnNewGame;
-    private javax.swing.JButton btnTahmin;
     private javax.swing.JLabel lblShowInf;
     private javax.swing.JLabel lblShowText;
     private javax.swing.JLabel lblShowStatus;
     private javax.swing.JTextField textInput;
     private javax.swing.JLabel lblKalanSayac;
     private javax.swing.JLabel lblKoruganImg;
-
 }
-
